@@ -13,14 +13,12 @@ var joinRoute = require('./routes/joinEventsRoute.js');
 // Require .env
 require('dotenv').config();
 
-
 // Serve client files
 app.use(express.static('./www'));
 
 // Use body parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 
 // Routes
 app.use('/api/events/',eventRoute);
