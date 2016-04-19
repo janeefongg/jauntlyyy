@@ -1,10 +1,14 @@
+require('dotenv').config();
+
+
+// Database connection
 var knex = require('knex') ({
   client: 'mysql',
   connection: {
-    host: 'mysqlcluster16.registeredsite.com',
-    user: 'joinme',
-    password: '!Qaz2wsx',
-    database: 'joinme'
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database
   },
   pool: {
     min: 0,
@@ -12,27 +16,25 @@ var knex = require('knex') ({
   }
 });
 
-var bookshelf = require('bookshelf')(knex);
 
+// Schema
 knex.schema.createTableIfNotExists('users', function (user) {
   user.increments('id').primary();
-  user.string('FirstName');
-  user.string('LastName');
-  user.string('Username');
+  user.string('Email').unique();
 }).then(function() {
   console.log('users table created');
 });
 
 knex.schema.createTableIfNotExists('events', function (event) {
   event.increments('id').primary();
-  event.string('EventName');
-  // event.integer('Owner_id').references('User_id');
+  event.string('inputTitle');
   event.integer('userId').unsigned();
   event.foreign('userId').references('id').inTable('users');
-  event.string('EventTime');
-  event.string('EventDuration');
-  event.string('EventDate');
-  event.string('Location');
+  event.dateTime('datetimeValue');
+  event.string('duration');
+  event.string('address');
+  event.string('latlng');
+  event.string('imageUrl');
 }).then(function() {
   console.log('events table created');
 });
@@ -46,9 +48,7 @@ knex.schema.createTableIfNotExists('users_events', function(join) {
   console.log('users_events join table created');
 });
 
-var db = bookshelf;
 
 module.exports = {
-  db: db,
   knex: knex
 };

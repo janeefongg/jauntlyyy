@@ -9,3 +9,5 @@ plugins/
 .idea
 
 utils/
+*.env
+*.pem
